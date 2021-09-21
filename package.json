@@ -1,5 +1,5 @@
 {
-  "name": "@mattcolman/jira-prepare-commit-msg",
+  "name": "jira-prepare-commit-msg-mattfork",
   "version": "2.0.0",
   "description": "Husky Git hook to add JIRA ticket ID into the commit message",
   "author": "Dmitry Shilov",

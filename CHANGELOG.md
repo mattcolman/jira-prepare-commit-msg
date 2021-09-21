@@ -5,7 +5,7 @@
 - [chore]
   - skip husky version tests (They don't seem to work from the original code...?)
   - add more tests
-  - namespace the fork @mattcolman/jira-prepare-commit-msg
+  - change package name to jira-prepare-commit-msg-mattfork for npm publish
 ### 1.6.0
 
 - [feature] Based on [issue](https://github.com/bk201-/jira-prepare-commit-msg/issues/319) JIRA ticket will be either
