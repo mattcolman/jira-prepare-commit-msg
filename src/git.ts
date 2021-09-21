@@ -13,10 +13,11 @@ interface MessageInfo {
 }
 
 // eslint-disable-next-line max-len
-const conventionalCommitRegExp = /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z- ]+\)!?)?: ([\w \S]+)$/g;
+const conventionalCommitRegExp =
+  /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z- ]+\)!?)?: ([\w \S]+)$/g;
 const gitVerboseStatusSeparator = '------------------------ >8 ------------------------';
 
-function getMsgFilePath(index = 0): string {
+export function getMsgFilePath(index = 0): string {
   debug('getMsgFilePath');
 
   // It is Husky 5
@@ -40,6 +41,17 @@ function getMsgFilePath(index = 0): string {
   // Unfortunately, this will break if there are escaped spaces within a single argument;
   // I don't believe there's a workaround for this without modifying Husky itself
   return gitParams.split(' ')[index];
+}
+
+export function getMessage(messageFilePath: string): string {
+  let message;
+  // Read file with commit message
+  try {
+    message = fs.readFileSync(messageFilePath, { encoding: 'utf-8' });
+  } catch (ex) {
+    throw new Error(`Unable to read the file "${messageFilePath}".`);
+  }
+  return message;
 }
 
 function escapeReplacement(str: string): string {
@@ -100,8 +112,13 @@ function findFirstLineToInsert(lines: string[], config: JPCMConfig): number {
   return firstNotEmptyLine;
 }
 
-function insertJiraTicketIntoMessage(messageInfo: MessageInfo, jiraTicket: string, config: JPCMConfig): string {
-  const message = messageInfo.originalMessage;
+export function insertJiraTicketIntoMessage(message: string, jiraTicket: string, config: JPCMConfig): string {
+  const messageInfo = getMessageInfo(message, config);
+  const messageTicket = getJiraTicket(message, config);
+  if (messageTicket === jiraTicket) {
+    debug(`message already contains ticket ${jiraTicket}`);
+    return message;
+  }
   const lines = message.split('\n').map((line) => line.trimLeft());
 
   if (!messageInfo.hasUserText) {
@@ -201,7 +218,8 @@ export function getRoot(): string {
   return path.resolve(cwd, gitCommonDir);
 }
 
-export async function getBranchName(gitRoot: string): Promise<string> {
+export async function getBranchName(): Promise<string> {
+  const gitRoot = getRoot();
   debug('gitBranchName');
 
   return new Promise((resolve, reject) => {
@@ -222,39 +240,15 @@ export async function getBranchName(gitRoot: string): Promise<string> {
 export function getJiraTicket(branchName: string, config: JPCMConfig): string {
   debug('getJiraTicket');
 
-  const jiraIdPattern = new RegExp(config.jiraTicketPattern, 'i');
+  const jiraIdPattern = new RegExp(config.jiraTicketPattern, 'g');
+
   const matched = jiraIdPattern.exec(branchName);
   const jiraTicket = matched && matched[0];
 
   if (!jiraTicket) {
-    throw new Error('The JIRA ticket ID not found');
+    debug('No Jira key found in branch name');
+    return '';
   }
 
-  return jiraTicket.toUpperCase();
-}
-
-export function writeJiraTicket(jiraTicket: string, config: JPCMConfig): void {
-  debug('writeJiraTicket');
-
-  const messageFilePath = getMsgFilePath();
-  let message;
-
-  // Read file with commit message
-  try {
-    message = fs.readFileSync(messageFilePath, { encoding: 'utf-8' });
-  } catch (ex) {
-    throw new Error(`Unable to read the file "${messageFilePath}".`);
-  }
-
-  const messageInfo = getMessageInfo(message, config);
-  const messageWithJiraTicket = insertJiraTicketIntoMessage(messageInfo, jiraTicket, config);
-
-  debug(messageWithJiraTicket);
-
-  // Write message back to file
-  try {
-    fs.writeFileSync(messageFilePath, messageWithJiraTicket, { encoding: 'utf-8' });
-  } catch (ex) {
-    throw new Error(`Unable to write the file "${messageFilePath}".`);
-  }
+  return jiraTicket;
 }

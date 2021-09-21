@@ -11,7 +11,7 @@ The JIRA ticket ID is taken from a git branch name.
 Installing Jira prepare commit msg hook into your project will mean everyone contributing code to your project will automatically tag each commit with
 it's associated issue key based off the branch name. 
 
-So if your branch name is `feature/TEST-123-new-feature`, then when you commit with a message `"initial commit"` it will automatically become `"TEST-123: initial commit"`.
+So if your branch name is `feature/TEST-123-new-feature`, then when you commit with a message `"initial commit"` it will automatically become `"[TEST-123] initial commit"`.
 
 Why would you want this? Well, Jira has many hidden goodies, and this is one of them! If you include an issue key in your commit messages AND you have your deployment pipeline connected to Jira this will unlock many bonus features, such as the Deployments view, Cycle time report, Deployment frequency report and I've heard many more features are coming soon!
 
@@ -165,12 +165,8 @@ and commit message is `fix(test)!: important changes` then at result will be `fi
 
 ## TODO
 
-- [x] Support user patterns
-- [x] Support configuration (package.json)
-- [x] Lint
-- [x] Tests
-  - [ ] Test for configuration
-- [x] Don't clear commit message
+- [X] Don't double tag if there's already an issue key in the message
+- [] Hard fail if there's no issue key in branch name or message, suggesting to use --no-verify
 
 ## License
 

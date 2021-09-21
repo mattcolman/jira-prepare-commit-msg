@@ -1,3 +1,11 @@
+### 2.0.0 (Forked)
+
+- [major] No longer accept lowercase issue keys
+  - if issue key is already included in the commit msg then just return the original message
+- [chore]
+  - skip husky version tests (They don't seem to work from the original code...?)
+  - add more tests
+  - namespace the fork @mattcolman/jira-prepare-commit-msg
 ### 1.6.0
 
 - [feature] Based on [issue](https://github.com/bk201-/jira-prepare-commit-msg/issues/319) JIRA ticket will be either

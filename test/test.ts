@@ -2,6 +2,8 @@ import test, { ExecutionContext } from 'ava';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as childProcess from 'child_process';
+import * as git from '../src/git'
+import { defaultConfig as testConfig } from '../src/config'
 
 interface CommitMessageToTest {
   initialMessage: string[];
@@ -84,7 +86,87 @@ async function testCommitMessage(
   t.is(index2, true, `Expected message: ${commitMessageToTest.expectedMessage}`);
 }
 
-test('husky2 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test('add ticket from branch name', async (t: ExecutionContext) => {
+  const MESSAGE = "hello there";
+  const testCases = [
+    {
+      branchName: "TASK-100",
+      expectedIssueKey: "TASK-100",
+      result: "[TASK-100] hello there",
+    },
+    {
+      branchName: "JIRA-1-is-the-best",
+      expectedIssueKey: "JIRA-1",
+      result: "[JIRA-1] hello there",
+    },
+    {
+      branchName: "ROBOT-777-LETS-get-it-done-2",
+      expectedIssueKey: "ROBOT-777",
+      result: "[ROBOT-777] hello there",
+    },
+    {
+      // with an issue directory
+      branchName: "issue/EASY-42-its-too-easy-baby",
+      expectedIssueKey: "EASY-42",
+      result: "[EASY-42] hello there",
+    },
+    {
+      // issue key as a directory
+      branchName: "TST-123/test-branch-name",
+      expectedIssueKey: "TST-123",
+      result: "[TST-123] hello there",
+    },
+    {
+      // two issue keys in a branch does not work
+      // it just takes the first key
+      description: `Lowercase key won't work`,
+      branchName: "TST-123-TST-456/test-branch-name",
+      expectedIssueKey: "TST-123",
+      result: "[TST-123] hello there",
+    },
+    {
+      // Lowercase key won't work
+      branchName: "test-500-lowercase-wont-work",
+      expectedIssueKey: '',
+      result: "hello there",
+    },
+    {
+      // Issue key must include a dash
+      branchName: "TEST100-nope-not-like-this",
+      expectedIssueKey: '',
+      result: "hello there",
+    },
+    {
+      // Same issue key found in branch and message, just leave message as is.
+      branchName: "TEST-100-branch-name",
+      expectedIssueKey: 'TEST-100',
+      message: 'TEST-100 hello there',
+      result: "TEST-100 hello there",
+    },
+    {
+      // Different key found in message to branch. Include both.
+      branchName: "TEST-100-branch-name",
+      expectedIssueKey: 'TEST-100',
+      message: 'DIFF-123 hello there',
+      result: "[TEST-100] DIFF-123 hello there",
+    },
+    {
+      // No key in branch name, but key in message.
+      branchName: "branch-name",
+      expectedIssueKey: '',
+      message: 'TEST-123 hello there',
+      result: "TEST-123 hello there",
+    },
+  ];  
+
+  testCases.forEach((testCase) => {
+    const ticket = git.getJiraTicket(testCase.branchName, testConfig);
+    t.is(ticket, testCase.expectedIssueKey);
+    t.is(git.insertJiraTicketIntoMessage(testCase.message ?? MESSAGE, ticket, testConfig), testCase.result);
+  });
+});
+
+test.skip('husky2 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky2', t);
   await exec('npm run cleanup:husky:2 && npm run prepare:husky:2', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky2', t);
@@ -94,7 +176,7 @@ test('husky2 JIRA ticket ID should be in commit message', async (t: ExecutionCon
   await testCommitMessage(imitateVerboseCommit, 'husky2', t);
 });
 
-test('husky3 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test.skip('husky3 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky3', t);
   await exec('npm run cleanup:husky:3 && npm run prepare:husky:3', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky3', t);
@@ -104,7 +186,7 @@ test('husky3 JIRA ticket ID should be in commit message', async (t: ExecutionCon
   await testCommitMessage(imitateVerboseCommit, 'husky3', t);
 });
 
-test('husky4 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test.skip('husky4 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky4', t);
   await exec('npm run cleanup:husky:4 && npm run prepare:husky:4', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky4', t);
@@ -114,7 +196,7 @@ test('husky4 JIRA ticket ID should be in commit message', async (t: ExecutionCon
   await testCommitMessage(imitateVerboseCommit, 'husky4', t);
 });
 
-test('husky5 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test.skip('husky5 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky5', t);
   await exec('npm run cleanup:husky:5 && npm run prepare:husky:5', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky5', t);

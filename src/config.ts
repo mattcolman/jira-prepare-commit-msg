@@ -9,7 +9,7 @@ export type JPCMConfig = {
   allowEmptyCommitMessage: boolean;
 };
 
-const defaultConfig = {
+export const defaultConfig = {
   messagePattern: '[$J] $M',
   jiraTicketPattern: '([A-Z]+-\\d+)',
   commentChar: '#',
