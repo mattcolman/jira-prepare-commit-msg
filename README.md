@@ -167,6 +167,8 @@ and commit message is `fix(test)!: important changes` then at result will be `fi
 
 - [X] Don't double tag if there's already an issue key in the message
 - [] Hard fail if there's no issue key in branch name or message, suggesting to use --no-verify
+- [] Test with semantic release
+- [] Write tests for semantic release and conventional commit
 
 ## License
 
