@@ -45,6 +45,16 @@ Inside your package.json add a standard husky npm script for the git hook
 }
 ```
 
+### Add prepare script
+
+Add a prepare script to ensure husky will be installed after `npm install` or `yarn` is run.
+
+#### via npm @^7
+`npm set-script prepare "husky install"`
+
+#### manual
+Add prepare script to package.json `"husky install"`
+
 ## Configuration
 
 Starting with v1.3 you can now use different ways of configuring it:
@@ -163,6 +173,13 @@ If the configuration is:
 
 and commit message is `fix(test)!: important changes` then at result will be `fix(test)!: [JIRA-1234] important changes`
 
+## What about my non npm projects?
+
+We are working on providing a maven plugin to do the same thing.
+
+We are also working on a manual install. I haven't tested it but if you 
+copy the files from /bin into a hooks folder, rename `index.js` to `commit-msg` and set your git hooks path
+to that folder, that should work. Ideally we just have a single file for this to make the process easier.
 ## TODO
 
 - [X] Don't double tag if there's already an issue key in the message
