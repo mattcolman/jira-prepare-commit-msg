@@ -69,8 +69,9 @@
     "cleanup:husky:3": "cd ./test/husky3 && rimraf .git && rimraf node_modules && rimraf package-lock.json",
     "cleanup:husky:4": "cd ./test/husky4 && rimraf .git && rimraf node_modules && rimraf package-lock.json",
     "cleanup:husky:5": "cd ./test/husky5 && rimraf .git && rimraf node_modules && rimraf package-lock.json && rimraf .husky",
-    "pretest": "npm run prepare:husky:2 && npm run prepare:husky:3 && npm run prepare:husky:4 && npm run prepare:husky:5",
+    "test:prepare": "npm run prepare:husky:2 && npm run prepare:husky:3 && npm run prepare:husky:4 && npm run prepare:husky:5",
     "test": "npm run compile && ava test/test.ts",
+    "test:full": "npm run test:prepare && npm run test",
     "test:unit": "ava test/test.ts",
     "posttest": "npm run cleanup:husky:2 && npm run cleanup:husky:3 && npm run cleanup:husky:4 && npm run cleanup:husky:5"
   }

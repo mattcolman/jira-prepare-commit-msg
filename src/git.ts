@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as cp from 'child_process';
 import { JPCMConfig } from './config';
-import { debug } from './log';
+import { debug, error } from './log';
 
 interface MessageInfo {
   originalMessage: string;
@@ -115,10 +115,20 @@ function findFirstLineToInsert(lines: string[], config: JPCMConfig): number {
 export function insertJiraTicketIntoMessage(message: string, jiraTicket: string, config: JPCMConfig): string {
   const messageInfo = getMessageInfo(message, config);
   const messageTicket = getJiraTicket(message, config);
+
+  if (!messageTicket && !jiraTicket) {
+    error(
+      `No Jira ticket found. 
+In future versions this may become mandatory with the option of committing with --no-verify to bypass the check`,
+    );
+    return message;
+  }
+
   if (messageTicket === jiraTicket) {
     debug(`message already contains ticket ${jiraTicket}`);
     return message;
   }
+
   const lines = message.split('\n').map((line) => line.trimLeft());
 
   if (!messageInfo.hasUserText) {

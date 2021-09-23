@@ -3,11 +3,11 @@
 import * as fs from 'fs';
 import * as git from './git';
 import { loadConfig } from './config';
-import { debug, log } from './log';
+import { debug, log, error } from './log';
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async (): Promise<void> => {
-  log('start');
+  debug('start');
 
   try {
     const config = await loadConfig();
@@ -28,8 +28,9 @@ import { debug, log } from './log';
       throw new Error(`Unable to write the file "${messageFilePath}".`);
     }
   } catch (err) {
-    // error(err);
+    console.log('what err', err);
+    error(err);
   }
 
-  log('done');
+  debug('done');
 })();
