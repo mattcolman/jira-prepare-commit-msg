@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as cp from 'child_process';
 import { JPCMConfig } from './config';
-import { debug, error } from './log';
+import { debug, error, log } from './log';
 
 interface MessageInfo {
   originalMessage: string;
@@ -182,6 +182,7 @@ In future versions this may become mandatory with the option of committing with 
     }
   }
 
+  log(`prepending issue key ${jiraTicket}`);
   return lines.join('\n');
 }
 
