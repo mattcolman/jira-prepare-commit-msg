@@ -186,6 +186,7 @@ to that folder, that should work. Ideally we just have a single file for this to
 - [] Hard fail if there's no issue key in branch name or message, suggesting to use --no-verify
 - [] Test with semantic release
 - [] Write tests for semantic release and conventional commit
+- [] hook doesn't work in interactive mode. Should this be a commit-msg hook instead of prepare-commit-msg ??
 
 ## License
 

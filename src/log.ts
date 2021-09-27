@@ -12,6 +12,8 @@ export function log(message: string): void {
   console.log(`JIRA prepare commit msg > ${message}`);
 }
 
-export function error(err: string): void {
-  console.error(`JIRA prepare commit msg > ${err}`);
+export function error(err: unknown): void {
+  if (typeof err === 'string') {
+    console.error(`JIRA prepare commit msg > ${err}`);
+  }
 }

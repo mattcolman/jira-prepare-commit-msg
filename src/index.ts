@@ -3,11 +3,11 @@
 import * as fs from 'fs';
 import * as git from './git';
 import { loadConfig } from './config';
-import { debug, log } from './log';
+import { debug, error } from './log';
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async (): Promise<void> => {
-  log('start');
+  debug('start');
 
   try {
     const config = await loadConfig();
@@ -16,7 +16,6 @@ import { debug, log } from './log';
     const message = git.getMessage(messageFilePath);
     const branch = await git.getBranchName();
     const ticket = git.getJiraTicket(branch, config);
-    log(`The JIRA ticket ID is: ${ticket}`);
     const messageWithJiraTicket = git.insertJiraTicketIntoMessage(message, ticket, config);
 
     debug(messageWithJiraTicket);
@@ -28,8 +27,8 @@ import { debug, log } from './log';
       throw new Error(`Unable to write the file "${messageFilePath}".`);
     }
   } catch (err) {
-    // error(err);
+    error(err);
   }
 
-  log('done');
+  debug('done');
 })();
