@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as cp from 'child_process';
 import { JPCMConfig } from './config';
 import { debug, error, log } from './log';
+import chalk from 'chalk';
 
 interface MessageInfo {
   originalMessage: string;
@@ -112,20 +113,25 @@ function findFirstLineToInsert(lines: string[], config: JPCMConfig): number {
   return firstNotEmptyLine;
 }
 
-export function insertJiraTicketIntoMessage(message: string, jiraTicket: string, config: JPCMConfig): string {
+export function insertJiraTicketIntoMessage(message: string, branchTicket: string, config: JPCMConfig): string {
   const messageInfo = getMessageInfo(message, config);
   const messageTicket = getJiraTicket(message, config);
 
-  if (!messageTicket && !jiraTicket) {
+  if (!messageTicket && !branchTicket) {
     error(
-      `No Jira ticket found. 
+      `${chalk.white.bgRed.bold('No Jira ticket found')}. 
 In future versions this may become mandatory with the option of committing with --no-verify to bypass the check`,
     );
     return message;
   }
 
-  if (messageTicket === jiraTicket) {
-    log(`nothing to do. Message already contains issue key ${jiraTicket}`);
+  if (messageTicket && !branchTicket) {
+    log(`nothing to do. Message already contains issue key ${chalk.white.bgBlue.bold(messageTicket)}`);
+    return message;
+  }
+
+  if (messageTicket === branchTicket) {
+    log(`nothing to do. Message already contains issue key ${chalk.white.bgBlue.bold(branchTicket)}`);
     return message;
   }
 
@@ -134,7 +140,7 @@ In future versions this may become mandatory with the option of committing with 
   if (!messageInfo.hasUserText) {
     debug(`User didn't write the message. Allow empty commit is ${String(config.allowEmptyCommitMessage)}`);
 
-    const preparedMessage = replaceMessageByPattern(jiraTicket, '', config.messagePattern);
+    const preparedMessage = replaceMessageByPattern(branchTicket, '', config.messagePattern);
 
     if (messageInfo.hasAnyText) {
       const insertedMessage = config.allowEmptyCommitMessage
@@ -166,23 +172,23 @@ In future versions this may become mandatory with the option of committing with 
         if (match) {
           debug(`Conventional commit message: ${match}`);
           lines[firstLineToInsert] = `${type}${scope || ''}: ${replaceMessageByPattern(
-            jiraTicket,
+            branchTicket,
             msg,
             config.messagePattern,
           )}`;
         }
-      } else if (!line.includes(jiraTicket)) {
-        lines[firstLineToInsert] = replaceMessageByPattern(jiraTicket, line || '', config.messagePattern);
+      } else if (!line.includes(branchTicket)) {
+        lines[firstLineToInsert] = replaceMessageByPattern(branchTicket, line || '', config.messagePattern);
       }
     }
 
     // Add jira ticket into the message in case of missing
-    if (lines.every((line) => !line.includes(jiraTicket))) {
-      lines[0] = replaceMessageByPattern(jiraTicket, lines[0] || '', config.messagePattern);
+    if (lines.every((line) => !line.includes(branchTicket))) {
+      lines[0] = replaceMessageByPattern(branchTicket, lines[0] || '', config.messagePattern);
     }
   }
 
-  log(`add issue key ${jiraTicket}`);
+  log(`add issue key ${chalk.white.bgBlue.bold(branchTicket)}`);
   return lines.join('\n');
 }
 

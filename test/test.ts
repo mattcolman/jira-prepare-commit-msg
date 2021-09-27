@@ -157,6 +157,14 @@ test('add ticket from branch name', async (t: ExecutionContext) => {
       message: 'TEST-123 hello there',
       result: "TEST-123 hello there",
     },
+    {
+      // No key in branch name or in message.
+      // a console warning is displayed.
+      branchName: "branch-name",
+      expectedIssueKey: '',
+      message: 'hello there',
+      result: "hello there",
+    },
   ];  
 
   testCases.forEach((testCase) => {
