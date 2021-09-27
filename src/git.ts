@@ -125,7 +125,7 @@ In future versions this may become mandatory with the option of committing with 
   }
 
   if (messageTicket === jiraTicket) {
-    debug(`message already contains ticket ${jiraTicket}`);
+    log(`nothing to do. Message already contains issue key ${jiraTicket}`);
     return message;
   }
 
@@ -182,7 +182,7 @@ In future versions this may become mandatory with the option of committing with 
     }
   }
 
-  log(`prepending issue key ${jiraTicket}`);
+  log(`add issue key ${jiraTicket}`);
   return lines.join('\n');
 }
 
