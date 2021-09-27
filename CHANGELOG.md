@@ -1,3 +1,8 @@
+### 2.0.1
+- [minor]
+  - stop logging start and stop events
+- [fix]
+  - fix error message when there's no Jira issue key found at all
 ### 2.0.0 (Forked)
 
 - [major] No longer accept lowercase issue keys
