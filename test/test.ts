@@ -165,6 +165,13 @@ test('add ticket from branch name', async (t: ExecutionContext) => {
       message: 'hello there',
       result: "hello there",
     },
+    {
+      // numbers and letters in the branch name
+      branchName: "issue/P2X-543-refactor-externalAssetsType-to-assetsScriptType*",
+      expectedIssueKey: 'P2X-543',
+      message: 'hello there',
+      result: "[P2X-543] hello there",
+    },
   ];  
 
   testCases.forEach((testCase) => {
