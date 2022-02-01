@@ -11,7 +11,7 @@ export type JPCMConfig = {
 
 export const defaultConfig = {
   messagePattern: '[$J] $M',
-  jiraTicketPattern: '([A-Z]+-\\d+)',
+  jiraTicketPattern: '((?!([A-Z0-9a-z]{1,10})-?$)[A-Z]{1}[A-Z0-9]+-\\d+)',
   commentChar: '#',
   isConventionalCommit: false,
   allowEmptyCommitMessage: false,
