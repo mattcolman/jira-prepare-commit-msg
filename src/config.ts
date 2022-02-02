@@ -3,7 +3,7 @@ import { debug, error } from './log';
 
 export type JPCMConfig = {
   messagePattern: string; // Where $J is a ticket number, $M is the message
-  jiraTicketPattern: string; // JIRA ticket RexExp
+  jiraTicketPattern: string; // Jira ticket RexExp
   commentChar: string; // Default comment char in the message
   isConventionalCommit: boolean; // Support https://www.conventionalcommits.org
   allowEmptyCommitMessage: boolean;

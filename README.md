@@ -2,9 +2,9 @@
 [![Downloads](https://img.shields.io/npm/dm/jira-prepare-commit-msg)](https://www.npmjs.com/package/jira-prepare-commit-msg)
 [![MIT license](https://img.shields.io/npm/l/jira-prepare-commit-msg)](http://opensource.org/licenses/MIT)
 
-The husky command to add JIRA ticket ID into the commit message if it is missed.
+The husky command to add Jira ticket ID into the commit message if it is missed.
 
-The JIRA ticket ID is taken from a git branch name.
+The Jira ticket ID is taken from a git branch name.
 
 ## Why?
 
@@ -81,8 +81,8 @@ See [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) for more details
 
 #### Supported message pattern
 
-`jira-prepare-commit-msg` supports special message pattern to configure where JIRA ticket number will be inserted. 
-* Symbols `$J` will be replaced on JIRA ticket number
+`jira-prepare-commit-msg` supports special message pattern to configure where Jira ticket number will be inserted. 
+* Symbols `$J` will be replaced on Jira ticket number
 * Symbols `$M` will be replaced on commit message.
  
 Pattern `[$J]\n$M` is currently supported by default. 
@@ -103,13 +103,13 @@ Pattern `[$J]\n$M` is currently supported by default.
 
 **NOTE:** the supplied commit message will be cleaned up by `strip` mode.
 
-#### Supported JIRA ticket pattern
+#### Supported Jira ticket pattern
 
-`jira-prepare-commit-msg` allows using custom regexp string pattern to search JIRA ticket number.
+`jira-prepare-commit-msg` allows using custom regexp string pattern to search Jira ticket number.
 
 Pattern `([A-Z]+-\\d+)` is currently supported by default. 
 
-**NOTE:** to search JIRA ticket pattern flag `i` is used: `new RegExp(pattern, i')`  
+**NOTE:** to search Jira ticket pattern flag `i` is used: `new RegExp(pattern, i')`  
 
 ```json
 {
@@ -133,7 +133,7 @@ Git uses `#` by default to comment lines in the commit message. If default char 
 
 #### Allow empty commit message
 
-The commit message might be empty after cleanup or using `-m ""`, `jira-prepare-commit-msg` might insert the JIRA ticket number anyway if this flag is set.
+The commit message might be empty after cleanup or using `-m ""`, `jira-prepare-commit-msg` might insert the Jira ticket number anyway if this flag is set.
 
 ```json
 {

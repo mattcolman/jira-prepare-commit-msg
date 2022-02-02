@@ -13,7 +13,7 @@
   - change package name to jira-prepare-commit-msg-mattfork for npm publish
 ### 1.6.0
 
-- [feature] Based on [issue](https://github.com/bk201-/jira-prepare-commit-msg/issues/319) JIRA ticket will be either
+- [feature] Based on [issue](https://github.com/bk201-/jira-prepare-commit-msg/issues/319) Jira ticket will be either
   - injected into commit message as a comment if the user doesn't write one `git commit`
   - ignored without the flag `config.allowEmptyCommitMessage` if the user writes empty message `git commit -m ""`
 - [minor] Bumps versions
@@ -110,7 +110,7 @@
 
 ### 1.0.1
 
-- [feature] Adds info about JIRA ticket ID to the log
+- [feature] Adds info about Jira ticket ID to the log
 - [minor] Updates README
 
 ### 1.0.0

@@ -146,8 +146,8 @@ In future versions this may become mandatory with the option of committing with 
       const insertedMessage = config.allowEmptyCommitMessage
         ? preparedMessage
         : `# ${preparedMessage}\n` +
-          '# JIRA prepare commit msg > ' +
-          'Please uncomment the line above if you want to insert JIRA ticket into commit message';
+          '# Jira prepare commit msg > ' +
+          'Please uncomment the line above if you want to insert Jira ticket into commit message';
 
       lines.unshift(insertedMessage);
     } else {

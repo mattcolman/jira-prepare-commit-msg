@@ -181,7 +181,7 @@ test('add ticket from branch name', async (t: ExecutionContext) => {
   });
 });
 
-test.skip('husky2 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test.skip('husky2 Jira ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky2', t);
   await exec('npm run cleanup:husky:2 && npm run prepare:husky:2', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky2', t);
@@ -191,7 +191,7 @@ test.skip('husky2 JIRA ticket ID should be in commit message', async (t: Executi
   await testCommitMessage(imitateVerboseCommit, 'husky2', t);
 });
 
-test.skip('husky3 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test.skip('husky3 Jira ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky3', t);
   await exec('npm run cleanup:husky:3 && npm run prepare:husky:3', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky3', t);
@@ -201,7 +201,7 @@ test.skip('husky3 JIRA ticket ID should be in commit message', async (t: Executi
   await testCommitMessage(imitateVerboseCommit, 'husky3', t);
 });
 
-test.skip('husky4 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test.skip('husky4 Jira ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky4', t);
   await exec('npm run cleanup:husky:4 && npm run prepare:husky:4', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky4', t);
@@ -211,7 +211,7 @@ test.skip('husky4 JIRA ticket ID should be in commit message', async (t: Executi
   await testCommitMessage(imitateVerboseCommit, 'husky4', t);
 });
 
-test.skip('husky5 JIRA ticket ID should be in commit message', async (t: ExecutionContext) => {
+test.skip('husky5 Jira ticket ID should be in commit message', async (t: ExecutionContext) => {
   await testCommitMessage(singleScopeMessage, 'husky5', t);
   await exec('npm run cleanup:husky:5 && npm run prepare:husky:5', './', t);
   await testCommitMessage(hyphenatedScopeMessage, 'husky5', t);
