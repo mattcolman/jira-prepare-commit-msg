@@ -1,3 +1,8 @@
+### 2.0.3
+- no change, there appears to be a problem with pushing to npm in 2.0.2
+### 2.0.2
+- [fix]
+  - fix default regex to support numbers too
 ### 2.0.1
 - [minor]
   - stop logging start and stop events
