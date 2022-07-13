@@ -107,14 +107,14 @@ Pattern `[$J]\n$M` is currently supported by default.
 
 `jira-prepare-commit-msg` allows using custom regexp string pattern to search Jira ticket number.
 
-Pattern `([A-Z]+-\\d+)` is currently supported by default. 
+Pattern `((?!([A-Z0-9a-z]{1,10})-?$)[A-Z]{1}[A-Z0-9]+-\\d+)` is currently supported by default. 
 
 **NOTE:** to search Jira ticket pattern flag `i` is used: `new RegExp(pattern, i')`  
 
 ```json
 {
   "jira-prepare-commit-msg": {
-    "jiraTicketPattern": "([A-Z]+-\\d+)"
+    "jiraTicketPattern": "((?!([A-Z0-9a-z]{1,10})-?$)[A-Z]{1}[A-Z0-9]+-\\d+)"
   }
 }
 ```
