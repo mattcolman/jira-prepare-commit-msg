@@ -1,6 +1,6 @@
 {
   "name": "jira-prepare-commit-msg-mattfork",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Husky Git hook to add Jira ticket ID into the commit message",
   "contributors": [
     "Dmitry Shilov",
