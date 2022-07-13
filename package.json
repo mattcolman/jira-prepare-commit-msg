@@ -17,11 +17,11 @@
     "message",
     "msg"
   ],
-  "homepage": "https://github.com/bk201-/jira-prepare-commit-msg",
-  "bugs": "https://github.com/bk201-/jira-prepare-commit-msg/issues",
+  "homepage": "https://github.com/mattcolman/jira-prepare-commit-msg",
+  "bugs": "https://github.com/mattcolman/jira-prepare-commit-msg/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bk201-/jira-prepare-commit-msg"
+    "url": "https://github.com/mattcolman/jira-prepare-commit-msg"
   },
   "license": "MIT",
   "dependencies": {
