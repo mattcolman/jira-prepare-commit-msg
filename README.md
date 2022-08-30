@@ -183,10 +183,12 @@ to that folder, that should work. Ideally we just have a single file for this to
 ## TODO
 
 - [X] Don't double tag if there's already an issue key in the message
-- [] Hard fail if there's no issue key in branch name or message, suggesting to use --no-verify
-- [] Test with semantic release
-- [] Write tests for semantic release and conventional commit
-- [] hook doesn't work in interactive mode. Should this be a commit-msg hook instead of prepare-commit-msg ??
+- [ ] Hard fail if there's no issue key in branch name or message, suggesting to use --no-verify
+- [ ] Test with semantic release
+- [ ] Do we need the conventialCommit prop? Can we auto detect this? Can we include this in the template?
+- [ ] Can we offer install via husky and install without husky? And offer a way to use this hook in non JS projects?
+- [ ] Write tests for semantic release and conventional commit
+- [ ] hook doesn't work in interactive mode. Should this be a commit-msg hook instead of prepare-commit-msg ??
 
 ## License
 
