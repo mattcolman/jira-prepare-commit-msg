@@ -1,0 +1,19 @@
+{
+  "name": "husky8-test",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "husky": "^8.0.0"
+  },
+  "scripts": {
+    "postinstall": "husky install && husky add .husky/prepare-commit-msg \"node ../../../bin/index.js --verbose \"\\$1\"\""
+  },
+  "jira-prepare-commit-msg": {
+    "isConventionalCommit": true,
+    "messagePattern": "[$J]. $M",
+    "allowEmptyCommitMessage": true
+  },
+  "dependencies": {
+    "abc": "^0.6.1"
+  }
+}

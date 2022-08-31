@@ -27,6 +27,7 @@ export function getMsgFilePath(index = 0): string {
     if (messageFilePath) {
       return messageFilePath;
     } else {
+      error(`You are using Husky 5. Please add $1 to jira-pre-commit-msg's parameters.`);
       throw new Error(`You are using Husky 5. Please add $1 to jira-pre-commit-msg's parameters.`);
     }
   }
@@ -119,10 +120,11 @@ export function insertJiraTicketIntoMessage(message: string, branchTicket: strin
 
   if (!messageTicket && !branchTicket) {
     error(
-      `${chalk.white.bgRed.bold('No Jira ticket found')}. 
-In future versions this may become mandatory with the option of committing with --no-verify to bypass the check`,
+      `${chalk.white.bgRed.bold('No Jira ticket found')}.
+      In future versions this may become mandatory with the option of committing with --no-verify to bypass the check`,
     );
     return message;
+    // throw new Error('No Jira ticket found. Use command with --no-verify to bypass this check.');
   }
 
   if (messageTicket && !branchTicket) {
@@ -134,6 +136,7 @@ In future versions this may become mandatory with the option of committing with 
     log(`nothing to do. Message already contains issue key ${chalk.white.bgBlue.bold(branchTicket)}`);
     return message;
   }
+  // !messageT and branch OR messageT and branch (but different values)
 
   const lines = message.split('\n').map((line) => line.trimLeft());
 
