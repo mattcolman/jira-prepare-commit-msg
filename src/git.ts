@@ -13,7 +13,6 @@ interface MessageInfo {
   hasVerboseText: boolean;
 }
 
-// eslint-disable-next-line max-len
 const messageRegExp =
   // eslint-disable-next-line max-len
   /(?<CC>^(?<TYPE>build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(?<SCOPE>\([a-z- ]+\)!?)?: )?(?<MESSAGE>[\w \S]+)$/g;
@@ -91,82 +90,50 @@ function getMessageInfo(message: string, config: JPCMConfig): MessageInfo {
 }
 
 function findFirstLineToInsert(lines: string[], config: JPCMConfig): number {
-  let firstNotEmptyLine = 0;
+  const verboseSeparatorIndex = lines.indexOf(gitVerboseStatusSeparator);
+  const beforeVerboseSeparator = lines.slice(0, verboseSeparatorIndex === -1 ? undefined : verboseSeparatorIndex);
+  return beforeVerboseSeparator.findIndex((line) => !line.startsWith(config.commentChar));
+}
 
-  for (let i = 0; i < lines.length; ++i) {
-    const line = lines[i];
-
-    // ignore everything after commentChar or the scissors comment, which present when doing a --verbose commit,
-    // or `git config commit.status true`
-    if (line === gitVerboseStatusSeparator) {
-      break;
-    }
-
-    if (line.startsWith(config.commentChar)) {
-      continue;
-    }
-
-    if (firstNotEmptyLine === -1) {
-      firstNotEmptyLine = i;
-      break;
-    }
+export function shouldAddTicketToMessage(message: string, branchTicket: string, config: JPCMConfig): boolean {
+  // const messageInfo = getMessageInfo(message, config);
+  const messageTicket = getJiraTicket(message, config);
+  // const lines = message.split('\n').map((line) => line.trimLeft());
+  if (!branchTicket) {
+    return false;
   }
 
-  return firstNotEmptyLine;
+  if (messageTicket === branchTicket) {
+    return false;
+  }
+
+  // if (messageInfo.hasUserText) {
+  //   // const firstLineToInsert = findFirstLineToInsert(lines, config);
+  //   // Unsure on this one: is the .every() condition affected by the firstLineToInsert block having added something already?
+  //   // if (firstLineToInsert === -1) {
+  //   //   if (lines.every((line) => line.includes(branchTicket))) {
+  //   //     shouldInsertMessage = false;
+  //   //   }
+  //   // }
+  //   return shouldInsertMessage;
+  // }
+
+  // // if ((!messageInfo.hasAnyText) {
+  // //   shouldInsertMessage = false;
+  // // }
+
+  return true;
 }
 
 export function insertJiraTicketIntoMessage(message: string, branchTicket: string, config: JPCMConfig): string {
   const messageInfo = getMessageInfo(message, config);
-  const messageTicket = getJiraTicket(message, config);
-
-  if (!messageTicket && !branchTicket) {
-    error(
-      `${chalk.white.bgRed.bold('No Jira ticket found')}.
-      In future versions this may become mandatory with the option of committing with --no-verify to bypass the check`,
-    );
-    return message;
-    // throw new Error('No Jira ticket found. Use command with --no-verify to bypass this check.');
-  }
-
-  if (messageTicket && !branchTicket) {
-    log(`nothing to do. Message already contains issue key ${chalk.white.bgBlue.bold(messageTicket)}`);
-    return message;
-  }
-
-  if (messageTicket === branchTicket) {
-    log(`nothing to do. Message already contains issue key ${chalk.white.bgBlue.bold(branchTicket)}`);
-    return message;
-  }
-  // !messageT and branch OR messageT and branch (but different values)
+  // const messageTicket = getJiraTicket(message, config);
 
   const lines = message.split('\n').map((line) => line.trimLeft());
 
-  if (!messageInfo.hasUserText) {
-    debug(`User didn't write the message. Allow empty commit is ${String(config.allowEmptyCommitMessage)}`);
-
-    const preparedMessage = replaceMessageByPattern(branchTicket, '', config.messagePattern);
-
-    if (messageInfo.hasAnyText) {
-      const insertedMessage = config.allowEmptyCommitMessage
-        ? preparedMessage
-        : `# ${preparedMessage}\n` +
-          '# Jira prepare commit msg > ' +
-          'Please uncomment the line above if you want to insert Jira ticket into commit message';
-
-      lines.unshift(insertedMessage);
-    } else {
-      if (config.allowEmptyCommitMessage) {
-        lines.unshift(preparedMessage);
-      } else {
-        debug(`Commit message is empty. Skipping...`);
-      }
-    }
-  } else {
+  if (messageInfo.hasUserText) {
     const firstLineToInsert = findFirstLineToInsert(lines, config);
-
     debug(`First line to insert is: ${firstLineToInsert > -1 ? lines[firstLineToInsert] : ''} (${firstLineToInsert})`);
-
-    // if (firstLineToInsert !== -1) {
     const line = lines[firstLineToInsert];
     // This is for unit tests otherwise the regex maintains state as its a const outside of this fn scope
     messageRegExp.lastIndex = -1;
@@ -175,13 +142,16 @@ export function insertJiraTicketIntoMessage(message: string, branchTicket: strin
     if (!MESSAGE.includes(branchTicket)) {
       lines[firstLineToInsert] = `${CC}${replaceMessageByPattern(branchTicket, MESSAGE, config.messagePattern)}`;
     }
-    // }
-
-    // Add jira ticket into the message in case of missing
-    // if (lines.every((line) => !line.includes(branchTicket))) {
-    //   lines[0] = replaceMessageByPattern(branchTicket, lines[0] || '', config.messagePattern);
-    // }
+  } else {
+    debug(`User didn't write the message. Injecting message`);
+    const preparedMessage = replaceMessageByPattern(branchTicket, '', config.messagePattern);
+    lines.unshift(preparedMessage);
   }
+
+  // // Add jira ticket into the message in case of missing
+  // if (lines.every((line) => !line.includes(branchTicket))) {
+  //   lines[0] = replaceMessageByPattern(branchTicket, lines[0] || '', config.messagePattern);
+  // }
 
   log(`add issue key ${chalk.white.bgBlue.bold(branchTicket)}`);
   return lines.join('\n');
