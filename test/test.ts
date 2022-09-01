@@ -88,11 +88,21 @@ test('add ticket from branch name', async (t: ExecutionContext) => {
       message: 'hello there',
       result: "[P2X-543] hello there",
     },
+    {
+      // Conventional commits.
+      branchName: "issue/CC-420-refactor-externalAssetsType-to-assetsScriptType*",
+      expectedIssueKey: 'CC-420',
+      message: 'build: hello there',
+      result: "build: [CC-420] hello there",
+    },
   ];
 
   testCases.forEach((testCase) => {
-    const ticket = git.getJiraTicket(testCase.branchName, testConfig);
-    t.is(ticket, testCase.expectedIssueKey);
-    t.is(git.insertJiraTicketIntoMessage(testCase.message ?? MESSAGE, ticket, testConfig), testCase.result);
+    // if (testCase == testCases[1]) {
+      const ticket = git.getJiraTicket(testCase.branchName, testConfig);
+      t.is(ticket, testCase.expectedIssueKey);
+      t.is(git.insertJiraTicketIntoMessage(testCase.message ?? MESSAGE, ticket, testConfig), testCase.result);
+    // }
   });
 });
+

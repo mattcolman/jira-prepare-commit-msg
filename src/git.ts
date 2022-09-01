@@ -14,8 +14,9 @@ interface MessageInfo {
 }
 
 // eslint-disable-next-line max-len
-const conventionalCommitRegExp =
-  /^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z- ]+\)!?)?: ([\w \S]+)$/g;
+const messageRegExp =
+  // eslint-disable-next-line max-len
+  /(?<CC>^(?<TYPE>build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(?<SCOPE>\([a-z- ]+\)!?)?: )?(?<MESSAGE>[\w \S]+)$/g;
 const gitVerboseStatusSeparator = '------------------------ >8 ------------------------';
 
 export function getMsgFilePath(index = 0): string {
@@ -90,7 +91,7 @@ function getMessageInfo(message: string, config: JPCMConfig): MessageInfo {
 }
 
 function findFirstLineToInsert(lines: string[], config: JPCMConfig): number {
-  let firstNotEmptyLine = -1;
+  let firstNotEmptyLine = 0;
 
   for (let i = 0; i < lines.length; ++i) {
     const line = lines[i];
@@ -165,30 +166,21 @@ export function insertJiraTicketIntoMessage(message: string, branchTicket: strin
 
     debug(`First line to insert is: ${firstLineToInsert > -1 ? lines[firstLineToInsert] : ''} (${firstLineToInsert})`);
 
-    if (firstLineToInsert !== -1) {
-      const line = lines[firstLineToInsert];
-
-      if (config.isConventionalCommit) {
-        debug(`Finding conventional commit in: ${line}`);
-        conventionalCommitRegExp.lastIndex = -1;
-        const [match, type, scope, msg] = conventionalCommitRegExp.exec(line) ?? [];
-        if (match) {
-          debug(`Conventional commit message: ${match}`);
-          lines[firstLineToInsert] = `${type}${scope || ''}: ${replaceMessageByPattern(
-            branchTicket,
-            msg,
-            config.messagePattern,
-          )}`;
-        }
-      } else if (!line.includes(branchTicket)) {
-        lines[firstLineToInsert] = replaceMessageByPattern(branchTicket, line || '', config.messagePattern);
-      }
+    // if (firstLineToInsert !== -1) {
+    const line = lines[firstLineToInsert];
+    // This is for unit tests otherwise the regex maintains state as its a const outside of this fn scope
+    messageRegExp.lastIndex = -1;
+    const { MESSAGE = '', CC = '' } = messageRegExp.exec(line)?.groups ?? {};
+    debug(`Found conventional commit message prefix: ${CC}`);
+    if (!MESSAGE.includes(branchTicket)) {
+      lines[firstLineToInsert] = `${CC}${replaceMessageByPattern(branchTicket, MESSAGE, config.messagePattern)}`;
     }
+    // }
 
     // Add jira ticket into the message in case of missing
-    if (lines.every((line) => !line.includes(branchTicket))) {
-      lines[0] = replaceMessageByPattern(branchTicket, lines[0] || '', config.messagePattern);
-    }
+    // if (lines.every((line) => !line.includes(branchTicket))) {
+    //   lines[0] = replaceMessageByPattern(branchTicket, lines[0] || '', config.messagePattern);
+    // }
   }
 
   log(`add issue key ${chalk.white.bgBlue.bold(branchTicket)}`);
