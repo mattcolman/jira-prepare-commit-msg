@@ -190,6 +190,9 @@ to that folder, that should work. Ideally we just have a single file for this to
 - [ ] Write tests for semantic release and conventional commit
 - [ ] hook doesn't work in interactive mode. Should this be a commit-msg hook instead of prepare-commit-msg ??
 
+## Kudos
+Kudo to Mo Beigi for being the original mastermind behind this amazing technology!
+
 ## License
 
 MIT
