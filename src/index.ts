@@ -16,7 +16,10 @@ import { debug, error } from './log';
     const message = git.getMessage(messageFilePath);
     const branch = await git.getBranchName();
     const ticket = git.getJiraTicket(branch, config);
-    const messageWithJiraTicket = git.insertJiraTicketIntoMessage(message, ticket, config);
+    const shouldAddTicketToMessage = git.shouldAddTicketToMessage(message, ticket, config);
+    const messageWithJiraTicket = shouldAddTicketToMessage
+      ? git.insertJiraTicketIntoMessage(message, ticket, config)
+      : message;
 
     debug(messageWithJiraTicket);
 

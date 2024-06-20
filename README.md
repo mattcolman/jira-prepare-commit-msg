@@ -28,7 +28,7 @@ For Husky 5:
 Execute command
 
 ```shell
-npx husky add .husky/prepare-commit-msg 'npx jira-prepare-commit-msg $1'
+npx husky add .husky/prepare-commit-msg 'npx jira-prepare-commit-msg \"\\$1\"\"'
 ```
 
 For Husky 2-4:

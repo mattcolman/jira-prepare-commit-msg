@@ -5,7 +5,6 @@ export type JPCMConfig = {
   messagePattern: string; // Where $J is a ticket number, $M is the message
   jiraTicketPattern: string; // Jira ticket RexExp
   commentChar: string; // Default comment char in the message
-  isConventionalCommit: boolean; // Support https://www.conventionalcommits.org
   allowEmptyCommitMessage: boolean;
 };
 
@@ -13,7 +12,6 @@ export const defaultConfig = {
   messagePattern: '[$J] $M',
   jiraTicketPattern: '((?!([A-Z0-9a-z]{1,10})-?$)[A-Z]{1}[A-Z0-9]+-\\d+)',
   commentChar: '#',
-  isConventionalCommit: false,
   allowEmptyCommitMessage: false,
 } as JPCMConfig;
 
